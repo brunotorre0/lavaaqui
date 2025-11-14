@@ -1,0 +1,261 @@
+.login-content {
+  --background: #f5f5f5;
+}
+
+.login-banner {
+  background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%);
+  height: 45vh;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 0 0 60% 60% / 0 0 40px 40px;
+  padding: 40px 20px 70px 20px;
+  overflow: hidden;
+}
+
+.banner-title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin: 0;
+  z-index: 2;
+  position: relative;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: 'Righteous', cursive;
+}
+
+.banner-logo {
+  width: 120px;
+  height: 120px;
+  margin-top: 10px;
+  z-index: 2;
+  position: relative;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  object-fit: contain;
+}
+
+.login-card {
+  background: white;
+  margin: -60px 20px 20px 20px;
+  border-radius: 25px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  position: relative;
+}
+
+.toggle-buttons {
+  display: flex;
+  gap: 0;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+  
+  &:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  
+  &.active {
+    background: #2F00FF;
+    color: white;
+    box-shadow: 0 2px 8px rgba(47, 0, 255, 0.3);
+    z-index: 1;
+    position: relative;
+  }
+  
+  &:not(.active) {
+    background: #FFE082;
+    color: #333;
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.login-form {
+  margin-top: 20px;
+}
+
+.input-wrapper {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #333;
+  padding: 10px 0;
+  font-size: 1rem;
+  background: transparent;
+  outline: none;
+  color: #000000 !important;
+  padding-right: 40px;
+  
+  &::placeholder {
+    color: #999;
+    font-size: 0.9rem;
+  }
+  
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    -webkit-text-fill-color: #000000 !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  }
+  
+  &:focus {
+    border-bottom-color: #2F00FF;
+    color: #000000 !important;
+  }
+}
+
+.visibility-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 1.3rem;
+  transition: color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #2F00FF;
+  }
+
+  ion-icon {
+    font-size: 1.3rem;
+  }
+}
+
+.login-button {
+  --background: #2F00FF;
+  --color: #ffffff;
+  --border-radius: 12px;
+  margin-top: 30px;
+  height: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: none;
+  box-shadow: 0 4px 12px rgba(47, 0, 255, 0.3);
+  
+  &::part(native) {
+    color: #ffffff !important;
+  }
+  
+  ion-label {
+    color: #ffffff !important;
+  }
+  
+  &:hover {
+    --background: #2500cc;
+  }
+}
+
+.or-divider {
+  text-align: center;
+  margin: 25px 0;
+  position: relative;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #e0e0e0;
+  }
+  
+  &::before {
+    left: 0;
+  }
+  
+  &::after {
+    right: 0;
+  }
+  
+  span {
+    color: #999;
+    font-size: 0.9rem;
+    background: white;
+    padding: 0 10px;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.social-login {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.social-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.google-btn {
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.facebook-btn {
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+

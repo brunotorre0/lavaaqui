@@ -1,0 +1,5 @@
+export const environment = {
+  production: true,
+  googleClientId: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+  facebookAppId: 'YOUR_FACEBOOK_APP_ID'
+};

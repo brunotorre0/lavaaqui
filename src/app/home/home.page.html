@@ -1,0 +1,81 @@
+<ion-content [fullscreen]="true" [scrollY]="false" class="home-content">
+  <div class="home-banner">
+    <div class="banner-header">
+      <ion-icon class="banner-icon" name="home-outline" aria-hidden="true" (click)="goToHome()"></ion-icon>
+      <ion-icon class="banner-icon" name="person-circle-outline" aria-hidden="true" (click)="openAccountMenu($event)"></ion-icon>
+    </div>
+    <h1 class="banner-title">LavaAqui</h1>
+  </div>
+
+  <div class="home-body">
+    <button class="location-card" type="button" (click)="openMap()">
+      <ion-icon class="location-icon" name="location-outline" aria-hidden="true"></ion-icon>
+      <span class="location-label">{{ selectedLaundry ? selectedLaundry.name : 'Morada' }}</span>
+      <ion-icon class="location-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+    </button>
+
+    <div class="selected-map-container" *ngIf="selectedLaundry">
+      <iframe
+        [src]="selectedLaundryMapUrl"
+        [title]="selectedLaundry.name"
+        allowfullscreen
+        loading="lazy"
+        class="selected-map">
+      </iframe>
+    </div>
+
+    <div class="default-map-container" *ngIf="!selectedLaundry">
+      <div class="default-map-placeholder">
+        <ion-icon name="map-outline"></ion-icon>
+        <p>Selecione uma lavandaria para ver a localização</p>
+      </div>
+    </div>
+
+    <div class="action-grid">
+      <button class="action-card" type="button">
+        <ion-icon name="water-outline" aria-hidden="true"></ion-icon>
+        <span>Lavar</span>
+      </button>
+      <button class="action-card" type="button">
+        <ion-icon name="sunny-outline" aria-hidden="true"></ion-icon>
+        <span>Secar</span>
+      </button>
+      <button class="action-card" type="button">
+        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+        <span>Histórico</span>
+      </button>
+      <button class="action-card" type="button">
+        <ion-icon name="log-out-outline" aria-hidden="true"></ion-icon>
+        <span>Sair</span>
+      </button>
+    </div>
+  </div>
+
+  <ion-modal [isOpen]="isMapModalOpen" (didPresent)="onMapModalPresent()" (didDismiss)="closeMap()" cssClass="map-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Selecionar Lavandaria</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeMap()">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [scrollY]="false">
+        <div id="map"></div>
+        <div class="laundry-selection" *ngIf="tempSelectedLaundry">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{ tempSelectedLaundry.name }}</ion-card-title>
+              <ion-card-subtitle>{{ tempSelectedLaundry.address }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-button expand="block" (click)="confirmSelection()">Selecionar</ion-button>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>
