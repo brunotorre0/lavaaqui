@@ -1,0 +1,177 @@
+.history-content {
+  --background: #f5f5f5;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-title-top {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #999;
+  margin: 16px 0 0 20px;
+  padding: 0;
+  z-index: 10;
+  position: relative;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%);
+  border-radius: 0 0 70% 70% / 0 0 140px 140px;
+  padding: 56px 24px 80px;
+  position: relative;
+  color: white;
+  overflow: hidden;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.icon-button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.hero-card h1 {
+  font-size: 2.4rem;
+  font-weight: 500;
+  margin: 0;
+  font-family: 'Righteous', cursive;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  text-align: center;
+}
+
+.profile-icon {
+  font-size: 2rem;
+  color: white;
+}
+
+.history-container {
+  margin-top: -60px;
+  padding: 0 20px 24px;
+  flex: 1;
+}
+
+.history-table {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  background: #f8f8f8;
+  border-bottom: 2px solid #e0e0e0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #111;
+}
+
+.header-cell {
+  text-align: left;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.table-cell {
+  display: flex;
+  align-items: center;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.type-badge.type-secagem {
+  background: linear-gradient(135deg, #50C9CE 0%, #6B9BD1 100%);
+}
+
+.type-badge.type-lavagem {
+  background: linear-gradient(135deg, #6B9BD1 0%, #50C9CE 100%);
+}
+
+.price-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+}
+
+.date-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #111;
+  background: white;
+  border: 1px solid #e0e0e0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  
+  ion-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+  
+  p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+  }
+  
+  .empty-subtitle {
+    font-size: 0.9rem;
+    color: #bbb;
+  }
+}
+

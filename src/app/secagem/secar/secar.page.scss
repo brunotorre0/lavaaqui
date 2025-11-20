@@ -1,0 +1,141 @@
+.drying-content {
+  --background: #f5f5f5;
+}
+
+.page-wrapper {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%);
+  border-radius: 0 0 70% 70% / 0 0 140px 140px;
+  padding: 56px 24px 80px;
+  position: relative;
+  color: white;
+  overflow: visible;
+  z-index: 1;
+}
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+.profile-icon {
+  font-size: 2rem;
+  color: white;
+}
+
+.hero-card h1 {
+  margin: 0;
+  font-size: 2.4rem;
+  font-weight: 500;
+  font-family: 'Righteous', cursive;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: white;
+}
+
+.machine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: -60px;
+  padding: 0 20px 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.machine-card {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  border: none;
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.machine-index {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.machine-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.machine-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+  color: #050038;
+}
+
+.machine-detail {
+  margin: 0;
+  color: #6e6b8f;
+  font-size: 14px;
+}
+
+.machine-price {
+  padding: 8px 16px;
+  background: #bdfcc0;
+  border-radius: 14px;
+  font-weight: 700;
+  color: #0f7f37;
+  font-size: 16px;
+}
+
+.step-info {
+  text-align: center;
+  background: rgba(107, 70, 193, 0.1);
+  border-radius: 18px;
+  padding: 16px;
+  color: #6B46C1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 20px 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.step-info strong {
+  font-size: 16px;
+}
+
+.step-info span {
+  font-size: 14px;
+  color: #6B46C1;
+}
+

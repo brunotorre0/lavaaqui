@@ -15,6 +15,14 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
+    path: 'secagem',
+    loadChildren: () => import('./secagem/secagem.module').then( m => m.SecagemModule)
+  },
+  {
+    path: 'historico',
+    loadChildren: () => import('./historico/historico.module').then( m => m.HistoricoModule)
+  },
+  {
     path: '',
     redirectTo: 'splash',
     pathMatch: 'full'

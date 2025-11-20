@@ -36,11 +36,11 @@
         <ion-icon name="water-outline" aria-hidden="true"></ion-icon>
         <span>Lavar</span>
       </button>
-      <button class="action-card" type="button">
+      <button class="action-card" type="button" (click)="goToDrying()">
         <ion-icon name="sunny-outline" aria-hidden="true"></ion-icon>
         <span>Secar</span>
       </button>
-      <button class="action-card" type="button">
+      <button class="action-card" type="button" (click)="goToHistory()">
         <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
         <span>Histórico</span>
       </button>
@@ -53,15 +53,16 @@
 
   <ion-modal [isOpen]="isMapModalOpen" (didPresent)="onMapModalPresent()" (didDismiss)="closeMap()" cssClass="map-modal">
     <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Selecionar Lavandaria</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="closeMap()">Fechar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content [scrollY]="false">
+      <div class="map-modal-header">
+        <button type="button" class="header-icon-button" (click)="closeMap()">
+          <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
+        </button>
+        <h2 class="map-modal-title">Selecione a loja</h2>
+        <button type="button" class="header-icon-button" (click)="centerMapOnUser()">
+          <ion-icon name="locate-outline" aria-hidden="true"></ion-icon>
+        </button>
+      </div>
+      <ion-content [scrollY]="false" class="map-content">
         <div id="map"></div>
         <div class="laundry-selection" *ngIf="tempSelectedLaundry">
           <ion-card>
@@ -70,7 +71,12 @@
               <ion-card-subtitle>{{ tempSelectedLaundry.address }}</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <ion-button expand="block" (click)="confirmSelection()">Selecionar</ion-button>
+              <ion-button expand="block" (click)="confirmSelection()" class="select-button">
+                Selecionar
+              </ion-button>
+              <ion-button expand="block" fill="outline" (click)="cancelSelection()" class="cancel-button">
+                Cancelar
+              </ion-button>
             </ion-card-content>
           </ion-card>
         </div>

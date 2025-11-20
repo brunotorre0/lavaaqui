@@ -1,0 +1,50 @@
+<ion-content class="history-content" [fullscreen]="true">
+  <div class="page-wrapper">
+    <h2 class="page-title-top">Histórico</h2>
+    <div class="hero-card">
+      <div class="hero-top">
+        <button type="button" class="icon-button" (click)="goBack()">
+          <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
+        </button>
+        <h1>LavaAqui</h1>
+        <ion-icon name="person-circle-outline" class="profile-icon" aria-hidden="true"></ion-icon>
+      </div>
+    </div>
+
+    <div class="history-container">
+
+      <div class="history-table" *ngIf="history.length > 0">
+        <div class="table-header">
+          <div class="header-cell">Tipo</div>
+          <div class="header-cell">Preço</div>
+          <div class="header-cell">Data</div>
+        </div>
+
+        <div class="table-row" *ngFor="let entry of history">
+          <div class="table-cell">
+            <span class="type-badge" [ngClass]="getTypeClass(entry.type)">
+              {{ entry.label }}
+            </span>
+          </div>
+          <div class="table-cell">
+            <span class="price-badge">
+              {{ formatPrice(entry.price) }}
+            </span>
+          </div>
+          <div class="table-cell">
+            <span class="date-badge">
+              {{ entry.date }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="history.length === 0">
+        <ion-icon name="time-outline"></ion-icon>
+        <p>Nenhum histórico encontrado</p>
+        <p class="empty-subtitle">Os seus pagamentos aparecerão aqui</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

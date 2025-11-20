@@ -1,0 +1,52 @@
+<ion-content class="cycles-content" [fullscreen]="true">
+  <div class="page-wrapper">
+    <div class="hero-card">
+      <div class="hero-top">
+        <button type="button" class="icon-button" (click)="goBack()">
+          <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+        </button>
+        <ion-icon name="person-circle-outline" class="profile-icon" aria-hidden="true"></ion-icon>
+      </div>
+      <div class="machine-badge" *ngIf="machine">
+        <span>{{ machine.id }}</span>
+      </div>
+      <h2 *ngIf="machine">{{ machine.label }}</h2>
+    </div>
+
+    <div class="cycle-card">
+      <div class="cycle-header">
+        <ion-icon name="pin-outline" aria-hidden="true"></ion-icon>
+        <span>Ciclos</span>
+      </div>
+      <div class="cycle-options">
+        <button
+          type="button"
+          class="cycle-pill"
+          *ngFor="let option of cyclesOptions"
+          [class.active]="option === cycles"
+          (click)="selectCycles(option)"
+        >
+          {{ option }}
+        </button>
+      </div>
+      <div class="totals">
+        <div class="total-pill">
+          <span>Total</span>
+        </div>
+        <div class="price-pill">
+          {{ formatPrice(total) }}
+        </div>
+      </div>
+    </div>
+
+    <ion-button expand="block" class="primary-button" (click)="goToPayment()">
+      Pagamento
+    </ion-button>
+
+    <div class="step-info">
+      <strong>Passo 2 de 3</strong>
+      <span>Selecione os ciclos</span>
+    </div>
+  </div>
+</ion-content>
+

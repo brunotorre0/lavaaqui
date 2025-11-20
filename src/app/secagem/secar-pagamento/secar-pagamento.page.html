@@ -1,0 +1,45 @@
+<ion-content class="payment-content" [fullscreen]="true">
+  <div class="page-wrapper" *ngIf="summary">
+    <div class="hero-card">
+      <div class="hero-top">
+        <button type="button" class="icon-button" (click)="goBack()">
+          <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+        </button>
+        <ion-icon name="person-circle-outline" class="profile-icon" aria-hidden="true"></ion-icon>
+      </div>
+      <h2>{{ summary.machine.label }}</h2>
+      <div class="price-chip-container">
+        <div class="price-chip">{{ formatPrice(summary.total) }}</div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <span>{{ summary.machine.label }}</span>
+      <strong>{{ formatPrice(summary.total) }}</strong>
+    </div>
+
+    <div class="payment-options">
+      <button
+        type="button"
+        class="payment-card"
+        *ngFor="let option of paymentOptions"
+        [class.selected]="option.id === selectedPayment"
+        [ngClass]="option.colorClass"
+        (click)="selectPayment(option.id)"
+      >
+        <ion-icon [name]="option.icon" aria-hidden="true"></ion-icon>
+        <span>{{ option.label }}</span>
+      </button>
+    </div>
+
+    <ion-button expand="block" class="primary-button" (click)="pay()">
+      Pagar
+    </ion-button>
+
+    <div class="step-info">
+      <strong>Passo 3 de 3</strong>
+      <span>Pague</span>
+    </div>
+  </div>
+</ion-content>
+
