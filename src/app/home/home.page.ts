@@ -13,7 +13,7 @@ interface Laundry {
   address: string;
   lat: number;
   lng: number;
-  priceMultiplier: number; // Multiplicador de preço para esta lavandaria
+  priceMultiplier: number;
 }
 
 @Component({
@@ -75,7 +75,6 @@ export class HomePage implements OnInit {
   }
 
   onMapModalPresent() {
-    // Aguardar um pouco mais para garantir que o DOM está pronto
     setTimeout(() => {
       this.initMap();
     }, 300);
@@ -88,10 +87,8 @@ export class HomePage implements OnInit {
       return;
     }
 
-    // Limpar conteúdo anterior
     mapDiv.innerHTML = '';
 
-    // Obter localização atual do usuário
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -103,31 +100,25 @@ export class HomePage implements OnInit {
         },
         (error) => {
           console.error('Erro ao obter localização:', error);
-          // Se não conseguir obter localização, usar localização padrão (centro de Portugal)
           const defaultLocation = { lat: 39.5, lng: -8.0 };
           this.initMapWithLocation(mapDiv, defaultLocation);
         }
       );
     } else {
-      // Se geolocalização não estiver disponível, usar localização padrão
       const defaultLocation = { lat: 39.5, lng: -8.0 };
       this.initMapWithLocation(mapDiv, defaultLocation);
     }
   }
 
   initMapWithLocation(mapDiv: HTMLElement, centerLocation: { lat: number; lng: number }) {
-    // Verificar se o Google Maps está carregado e tem chave válida
     if (typeof google === 'undefined' || !google.maps) {
-      // Usar iframe do Google Maps como fallback (não requer chave de API)
       this.initMapWithIframe(mapDiv, centerLocation);
       return;
     }
 
-    // Limpar mapa anterior se existir
     if (this.map) {
       this.markers.forEach(m => {
         m.setMap(null);
-        // Remover círculos de ondas se existirem
         if ((m as any).waves) {
           (m as any).waves.forEach((wave: any) => wave.setMap(null));
         }
@@ -151,7 +142,6 @@ export class HomePage implements OnInit {
         backgroundColor: '#e5e5e5'
       });
 
-      // Adicionar marcador na localização atual do usuário
       const userMarker = new google.maps.Marker({
         position: centerLocation,
         map: this.map,
@@ -164,9 +154,7 @@ export class HomePage implements OnInit {
       });
       this.markers.push(userMarker);
 
-      // Adicionar marcadores das lavandarias com animação de ondas
       this.laundries.forEach(laundry => {
-        // Criar círculo vermelho para o marcador
         const markerIcon = {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 8,
@@ -184,7 +172,6 @@ export class HomePage implements OnInit {
           animation: google.maps.Animation.DROP
         });
 
-        // Criar círculos animados (ondas) ao redor do marcador
         const createWave = (radius: number, delay: number) => {
           const circle = new google.maps.Circle({
             strokeColor: '#FF0000',
@@ -197,7 +184,6 @@ export class HomePage implements OnInit {
             radius: radius,
           });
 
-          // Animação de expansão
           let currentRadius = radius;
           const expand = () => {
             currentRadius += 15;
@@ -208,7 +194,6 @@ export class HomePage implements OnInit {
             if (currentRadius < radius + 150) {
               setTimeout(expand, 50);
             } else {
-              // Reset e repetir
               currentRadius = radius;
               circle.setRadius(radius);
               circle.set('fillOpacity', 0.1);
@@ -221,7 +206,6 @@ export class HomePage implements OnInit {
           return circle;
         };
 
-        // Criar múltiplas ondas com delays diferentes
         const wave1 = createWave(30, 0);
         const wave2 = createWave(30, 500);
         const wave3 = createWave(30, 1000);
@@ -233,11 +217,9 @@ export class HomePage implements OnInit {
         });
 
         this.markers.push(marker);
-        // Guardar os círculos para poder removê-los depois
         (marker as any).waves = [wave1, wave2, wave3];
       });
 
-      // Forçar resize do mapa após um pequeno delay
       setTimeout(() => {
         if (this.map) {
           google.maps.event.trigger(this.map, 'resize');
@@ -245,17 +227,14 @@ export class HomePage implements OnInit {
       }, 100);
     } catch (error) {
       console.error('Erro ao inicializar mapa:', error);
-      // Se houver erro, usar iframe como fallback
       this.initMapWithIframe(mapDiv, centerLocation);
     }
   }
 
   initMapWithIframe(mapDiv: HTMLElement, centerLocation: { lat: number; lng: number }) {
-    // Usar iframe do Google Maps (funciona sem chave de API para visualização)
     const centerLat = centerLocation.lat;
     const centerLng = centerLocation.lng;
     
-    // Criar URL do Google Maps com centro na localização atual do usuário
     const mapUrl = `https://www.google.com/maps?q=${centerLat},${centerLng}&z=10&output=embed`;
     
     const iframe = document.createElement('iframe');
@@ -273,7 +252,6 @@ export class HomePage implements OnInit {
     
     mapDiv.appendChild(iframe);
     
-    // Criar lista de lavandarias como overlay
     const overlayContainer = document.createElement('div');
     overlayContainer.style.position = 'absolute';
     overlayContainer.style.bottom = '0px';
@@ -310,13 +288,9 @@ export class HomePage implements OnInit {
       
       item.addEventListener('click', () => {
         this.tempSelectedLaundry = laundry;
-        // Atualizar iframe para mostrar a lavandaria selecionada
         iframe.src = `https://www.google.com/maps?q=${laundry.lat},${laundry.lng}&z=16&output=embed`;
-        // Esconder a lista e mostrar o card de seleção
         overlayContainer.style.display = 'none';
-        // Forçar detecção de mudança do Angular
         setTimeout(() => {
-          // O Angular vai detectar a mudança em tempSelectedLaundry e mostrar o card
         }, 100);
       });
       
@@ -331,7 +305,6 @@ export class HomePage implements OnInit {
       overlayContainer.appendChild(item);
     });
     
-    // Remover última borda
     const lastItem = overlayContainer.lastElementChild as HTMLElement;
     if (lastItem) {
       lastItem.style.borderBottom = 'none';
@@ -341,7 +314,6 @@ export class HomePage implements OnInit {
   }
 
   searchLocation() {
-    // Placeholder para funcionalidade de pesquisa
     console.log('Pesquisar localização');
   }
 
@@ -357,7 +329,6 @@ export class HomePage implements OnInit {
             this.map.setCenter(userLocation);
             this.map.setZoom(10);
           } else {
-            // Se o mapa ainda não foi inicializado, reinicializar com a nova localização
             const mapDiv = document.getElementById('map');
             if (mapDiv) {
               mapDiv.innerHTML = '';
@@ -380,7 +351,6 @@ export class HomePage implements OnInit {
       this.markers = [];
       this.map = null;
     }
-    // Mostrar novamente a lista de lavandarias se estiver escondida
     const overlay = document.getElementById('laundry-list-overlay');
     if (overlay) {
       overlay.style.display = 'block';
@@ -393,14 +363,12 @@ export class HomePage implements OnInit {
       localStorage.setItem('selectedLaundry', JSON.stringify(this.selectedLaundry));
       this.updateSelectedLaundryMap();
       this.closeMap();
-      // Garantir que volta ao home
       this.router.navigate(['/home']);
     }
   }
 
   cancelSelection() {
     this.tempSelectedLaundry = null;
-    // Mostrar novamente a lista de lavandarias
     const overlay = document.getElementById('laundry-list-overlay');
     if (overlay) {
       overlay.style.display = 'block';

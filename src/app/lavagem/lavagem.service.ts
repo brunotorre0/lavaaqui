@@ -39,13 +39,10 @@ export class LavagemService {
     return this.programMultiplier;
   }
 
-  // Manter compatibilidade com código antigo (para ciclos)
   setCycles(value: number) {
-    // Não usado mais, mas mantido para compatibilidade
   }
 
   getCycles(): number {
-    // Não usado mais, mas mantido para compatibilidade
     return 20;
   }
 

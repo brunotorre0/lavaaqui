@@ -16,7 +16,6 @@
       <span class="amount-value">{{ formatPrice(amount) }}</span>
     </div>
 
-    <!-- Cartão de Crédito -->
     <div *ngIf="paymentMethod === 'card'" class="payment-form">
       <ion-item>
         <ion-label position="stacked">Número do Cartão</ion-label>
@@ -63,7 +62,6 @@
       </div>
     </div>
 
-    <!-- MB WAY -->
     <div *ngIf="paymentMethod === 'mb-way'" class="payment-form">
       <ion-item>
         <ion-label position="stacked">Número de Telefone</ion-label>
@@ -78,7 +76,6 @@
       <p class="info-text">Receberá uma notificação no seu MB WAY para confirmar o pagamento.</p>
     </div>
 
-    <!-- PayPal -->
     <div *ngIf="paymentMethod === 'paypal'" class="payment-form">
       <ion-item>
         <ion-label position="stacked">Email do PayPal</ion-label>
@@ -99,7 +96,6 @@
       </ion-item>
     </div>
 
-    <!-- MB MULTIBANCO -->
     <div *ngIf="paymentMethod === 'multibanco'" class="payment-form">
       <div class="multibanco-reference">
         <ion-icon name="cash-outline" class="reference-icon"></ion-icon>

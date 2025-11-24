@@ -100,7 +100,6 @@ export class SecarPagamentoPage {
       return;
     }
 
-    // Guardar no histórico antes de resetar
     if (this.summary) {
       const paymentMethodLabel = this.paymentOptions.find(p => p.id === this.selectedPayment)?.label || 'Desconhecido';
       this.historyService.addEntry({

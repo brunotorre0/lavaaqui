@@ -15,7 +15,6 @@ export class PerfilPage implements OnInit {
   userEmail: string = '';
   userName: string = '';
   userImage: string = '';
-  newEmail: string = '';
   newName: string = '';
   currentPassword: string = '';
   newPassword: string = '';
@@ -37,12 +36,10 @@ export class PerfilPage implements OnInit {
       return;
     }
     this.userEmail = email;
-    this.newEmail = email;
     
-    // Carregar nome e imagem do perfil
     const profileData = this.getProfileData();
-    this.userName = profileData.name || '';
-    this.newName = profileData.name || '';
+    this.userName = profileData.name || email || '';
+    this.newName = profileData.name || email || '';
     this.userImage = profileData.image || '';
   }
 
@@ -79,7 +76,6 @@ export class PerfilPage implements OnInit {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       
-      // Verificar se é uma imagem
       if (!file.type.startsWith('image/')) {
         this.toastController.create({
           message: 'Por favor, selecione uma imagem.',
@@ -89,7 +85,6 @@ export class PerfilPage implements OnInit {
         return;
       }
 
-      // Verificar tamanho (máximo 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.toastController.create({
           message: 'A imagem deve ter no máximo 5MB.',
@@ -130,66 +125,12 @@ export class PerfilPage implements OnInit {
   }
 
   private getProfileData(): { name: string; image: string } {
-    const stored = localStorage.getItem('userProfile');
+    const stored = localStorage.getItem(`userProfile_${this.userEmail}`);
     return stored ? JSON.parse(stored) : { name: '', image: '' };
   }
 
   private saveProfileData(profileData: { name: string; image: string }) {
-    localStorage.setItem('userProfile', JSON.stringify(profileData));
-  }
-
-  async updateEmail() {
-    if (!this.newEmail.trim()) {
-      const toast = await this.toastController.create({
-        message: 'O e-mail não pode estar vazio.',
-        duration: 2000,
-        color: 'warning',
-      });
-      toast.present();
-      return;
-    }
-
-    if (this.newEmail === this.userEmail) {
-      const toast = await this.toastController.create({
-        message: 'O novo e-mail é igual ao atual.',
-        duration: 2000,
-        color: 'warning',
-      });
-      toast.present();
-      return;
-    }
-
-    // Verificar se o novo email já existe
-    const registeredAccounts = this.getRegisteredAccounts();
-    const existingAccount = registeredAccounts.find(acc => acc.email === this.newEmail.trim());
-    
-    if (existingAccount) {
-      const toast = await this.toastController.create({
-        message: 'Este e-mail já está em uso.',
-        duration: 2000,
-        color: 'warning',
-      });
-      toast.present();
-      return;
-    }
-
-    // Atualizar email nas contas registadas
-    const accountIndex = registeredAccounts.findIndex(acc => acc.email === this.userEmail);
-    if (accountIndex !== -1) {
-      registeredAccounts[accountIndex].email = this.newEmail.trim();
-      localStorage.setItem('registeredAccounts', JSON.stringify(registeredAccounts));
-    }
-
-    // Atualizar email no localStorage
-    localStorage.setItem('userEmail', this.newEmail.trim());
-    this.userEmail = this.newEmail.trim();
-
-    const toast = await this.toastController.create({
-      message: 'E-mail atualizado com sucesso!',
-      duration: 2000,
-      color: 'success',
-    });
-    toast.present();
+    localStorage.setItem(`userProfile_${this.userEmail}`, JSON.stringify(profileData));
   }
 
   async updatePassword() {
@@ -213,9 +154,8 @@ export class PerfilPage implements OnInit {
       return;
     }
 
-    // Verificar palavra-passe atual
     const registeredAccounts = this.getRegisteredAccounts();
-    const account = registeredAccounts.find(acc => acc.email === this.userEmail);
+    const account = registeredAccounts.find((acc: any) => acc.name === this.userEmail || acc.email === this.userEmail);
     
     if (!account || account.password !== this.currentPassword) {
       const toast = await this.toastController.create({
@@ -227,11 +167,9 @@ export class PerfilPage implements OnInit {
       return;
     }
 
-    // Atualizar palavra-passe
     account.password = this.newPassword;
     localStorage.setItem('registeredAccounts', JSON.stringify(registeredAccounts));
 
-    // Limpar campos
     this.currentPassword = '';
     this.newPassword = '';
     this.confirmPassword = '';
@@ -244,7 +182,7 @@ export class PerfilPage implements OnInit {
     toast.present();
   }
 
-  private getRegisteredAccounts(): Array<{email: string, password: string}> {
+  private getRegisteredAccounts(): Array<any> {
     const stored = localStorage.getItem('registeredAccounts');
     return stored ? JSON.parse(stored) : [];
   }

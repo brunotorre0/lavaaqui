@@ -26,7 +26,6 @@ export class PaymentModalComponent implements OnInit {
   @Input() paymentMethod: string = '';
   @Input() amount: number = 0;
 
-  // Dados do formulário
   cardNumber: string = '';
   cardName: string = '';
   expiryDate: string = '';
@@ -58,7 +57,6 @@ export class PaymentModalComponent implements OnInit {
   }
 
   generateMultibancoReference(): void {
-    // Gera uma referência multibanco simulada (formato: 123 456 789)
     const part1 = Math.floor(Math.random() * 900) + 100;
     const part2 = Math.floor(Math.random() * 900) + 100;
     const part3 = Math.floor(Math.random() * 900) + 100;
@@ -122,7 +120,7 @@ export class PaymentModalComponent implements OnInit {
       case 'paypal':
         return !!(this.email.includes('@') && this.password.length >= 6);
       case 'multibanco':
-        return true; // Apenas exibe a referência
+        return true;
       default:
         return false;
     }

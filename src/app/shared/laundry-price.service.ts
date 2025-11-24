@@ -5,15 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class LaundryPriceService {
   private baseWashingPrices = {
-    6: 2.5,   // 6Kg
-    9: 3.5,   // 9Kg
-    15: 5.5   // 15Kg
+    6: 2.5,
+    9: 3.5,
+    15: 5.5
   };
 
   private baseDryingPrices = {
-    6: 3.5,   // 6Kg
-    9: 4.5,   // 9Kg
-    15: 6.5   // 15Kg
+    6: 3.5,
+    9: 4.5,
+    15: 6.5
   };
 
   getPriceMultiplier(): number {

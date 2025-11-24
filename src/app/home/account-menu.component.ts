@@ -12,8 +12,7 @@ import { PopoverController } from '@ionic/angular';
           <ion-icon *ngIf="!userImage" name="person-circle-outline" class="account-icon"></ion-icon>
         </div>
         <div class="account-details">
-          <p class="account-name">{{ userName || userEmail || 'Utilizador' }}</p>
-          <p class="account-email">{{ userEmail }}</p>
+          <p class="account-name">{{ userName || 'Utilizador' }}</p>
         </div>
       </div>
       <ion-item button (click)="updateProfile()" lines="none" class="menu-item">
@@ -128,11 +127,15 @@ export class AccountMenuComponent implements OnInit {
   }
 
   private loadProfileData() {
-    const stored = localStorage.getItem('userProfile');
-    if (stored) {
-      const profileData = JSON.parse(stored);
-      this.userName = profileData.name || '';
-      this.userImage = profileData.image || '';
+    if (this.userEmail) {
+      const stored = localStorage.getItem(`userProfile_${this.userEmail}`);
+      if (stored) {
+        const profileData = JSON.parse(stored);
+        this.userName = profileData.name || this.userEmail || '';
+        this.userImage = profileData.image || '';
+      } else {
+        this.userName = this.userEmail;
+      }
     }
   }
 

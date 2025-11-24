@@ -5,15 +5,14 @@ export interface HistoryEntry {
   type: 'secagem' | 'lavagem';
   label: string;
   price: number;
-  date: string; // formato: DD/MM/YYYY
-  time: string; // formato: HH:MM
+  date: string;
+  time: string;
   userEmail: string;
-  // Informações adicionais
-  machineWeight?: number; // peso da máquina em kg
-  duration?: number; // duração em minutos
-  program?: string; // programa usado (normal, delicado, etc) - apenas para lavagem
-  cycles?: number; // número de ciclos - apenas para secagem
-  paymentMethod?: string; // método de pagamento usado
+  machineWeight?: number;
+  duration?: number;
+  program?: string;
+  cycles?: number;
+  paymentMethod?: string;
 }
 
 @Injectable({
@@ -38,7 +37,7 @@ export class HistoryService {
       userEmail: userEmail,
     };
 
-    history.unshift(newEntry); // Adiciona no início
+    history.unshift(newEntry);
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(history));
   }
 
@@ -54,12 +53,11 @@ export class HistoryService {
     }
 
     const allHistory: HistoryEntry[] = JSON.parse(stored);
-    // Filtrar apenas histórico do utilizador atual e garantir compatibilidade com dados antigos
     return allHistory
       .filter(entry => entry.userEmail === userEmail)
       .map(entry => ({
         ...entry,
-        time: entry.time || '00:00' // Valor padrão para dados antigos
+        time: entry.time || '00:00'
       }));
   }
 
