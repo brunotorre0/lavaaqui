@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, PopoverController } from '@ionic/angular';
 import { DryerMachine, DryingService } from '../drying.service';
+import { AccountMenuComponent } from '../../home/account-menu.component';
 
 @Component({
   selector: 'app-secar-ciclos',
@@ -15,11 +16,18 @@ export class SecarCiclosPage {
   machine: DryerMachine | null = null;
   cyclesOptions = [20, 40, 60];
   cycles = 20;
+  userEmail: string = '';
 
   constructor(
     private router: Router,
-    private dryingService: DryingService
-  ) {}
+    private dryingService: DryingService,
+    private popoverController: PopoverController
+  ) {
+    const email = localStorage.getItem('userEmail');
+    if (email) {
+      this.userEmail = email;
+    }
+  }
 
   ionViewWillEnter() {
     const selection = this.dryingService.getSelectedMachine();
@@ -50,6 +58,30 @@ export class SecarCiclosPage {
 
   get total() {
     return this.dryingService.getTotalPrice();
+  }
+
+  async openAccountMenu(event: Event) {
+    const popover = await this.popoverController.create({
+      component: AccountMenuComponent,
+      event: event,
+      translucent: true,
+      componentProps: {
+        userEmail: this.userEmail
+      }
+    });
+    
+    await popover.present();
+    
+    const { data } = await popover.onDidDismiss();
+    if (data && data.logout) {
+      this.logout();
+    }
+  }
+
+  logout() {
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('selectedLaundry');
+    this.router.navigate(['/login']);
   }
 }
 

@@ -19,8 +19,16 @@ const routes: Routes = [
     loadChildren: () => import('./secagem/secagem.module').then( m => m.SecagemModule)
   },
   {
+    path: 'lavagem',
+    loadChildren: () => import('./lavagem/lavagem.module').then( m => m.LavagemModule)
+  },
+  {
     path: 'historico',
     loadChildren: () => import('./historico/historico.module').then( m => m.HistoricoModule)
+  },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilModule)
   },
   {
     path: '',

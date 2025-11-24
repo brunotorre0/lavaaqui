@@ -54,3 +54,11 @@ ion-button.primary-button::part(native) {
   background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%) !important;
   background-image: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%) !important;
 }
+
+/* Estilos para o modal de pagamento */
+.payment-modal {
+  --width: 90%;
+  --max-width: 500px;
+  --border-radius: 20px;
+  --backdrop-opacity: 0.5;
+}

@@ -6,7 +6,14 @@ export interface HistoryEntry {
   label: string;
   price: number;
   date: string; // formato: DD/MM/YYYY
+  time: string; // formato: HH:MM
   userEmail: string;
+  // Informações adicionais
+  machineWeight?: number; // peso da máquina em kg
+  duration?: number; // duração em minutos
+  program?: string; // programa usado (normal, delicado, etc) - apenas para lavagem
+  cycles?: number; // número de ciclos - apenas para secagem
+  paymentMethod?: string; // método de pagamento usado
 }
 
 @Injectable({
@@ -15,17 +22,19 @@ export interface HistoryEntry {
 export class HistoryService {
   private readonly STORAGE_KEY = 'laundry_history';
 
-  addEntry(entry: Omit<HistoryEntry, 'id' | 'date' | 'userEmail'>) {
+  addEntry(entry: Omit<HistoryEntry, 'id' | 'date' | 'time' | 'userEmail'>) {
     const userEmail = localStorage.getItem('userEmail');
     if (!userEmail) {
       return;
     }
 
+    const now = new Date();
     const history = this.getHistory();
     const newEntry: HistoryEntry = {
       id: Date.now().toString(),
       ...entry,
-      date: this.formatDate(new Date()),
+      date: this.formatDate(now),
+      time: this.formatTime(now),
       userEmail: userEmail,
     };
 
@@ -45,8 +54,13 @@ export class HistoryService {
     }
 
     const allHistory: HistoryEntry[] = JSON.parse(stored);
-    // Filtrar apenas histórico do utilizador atual
-    return allHistory.filter(entry => entry.userEmail === userEmail);
+    // Filtrar apenas histórico do utilizador atual e garantir compatibilidade com dados antigos
+    return allHistory
+      .filter(entry => entry.userEmail === userEmail)
+      .map(entry => ({
+        ...entry,
+        time: entry.time || '00:00' // Valor padrão para dados antigos
+      }));
   }
 
   clearHistory() {
@@ -70,6 +84,12 @@ export class HistoryService {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+  }
+
+  private formatTime(date: Date): string {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 }
 

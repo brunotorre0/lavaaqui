@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ToastController } from '@ionic/angular';
 import { AccountMenuComponent } from './account-menu.component';
 
 declare var google: any;
@@ -13,6 +13,7 @@ interface Laundry {
   address: string;
   lat: number;
   lng: number;
+  priceMultiplier: number; // Multiplicador de preço para esta lavandaria
 }
 
 @Component({
@@ -31,17 +32,18 @@ export class HomePage implements OnInit {
   private markers: any[] = [];
   
   laundries: Laundry[] = [
-    { id: '1', name: 'Lavandaria Central', address: 'Rua da República, 123, Lisboa', lat: 38.7223, lng: -9.1393 },
-    { id: '2', name: 'Lavandaria Express', address: 'Avenida da Liberdade, 456, Porto', lat: 41.1579, lng: -8.6291 },
-    { id: '3', name: 'Lavandaria Rápida', address: 'Rua do Comércio, 789, Braga', lat: 41.5518, lng: -8.4229 },
-    { id: '4', name: 'Lavandaria Moderna', address: 'Praça do Comércio, 321, Coimbra', lat: 40.2033, lng: -8.4103 },
-    { id: '5', name: 'Lavandaria 24h', address: 'Avenida Central, 654, Aveiro', lat: 40.6405, lng: -8.6538 }
+    { id: '1', name: 'Lavandaria Central', address: 'Rua da República, 123, Lisboa', lat: 38.7223, lng: -9.1393, priceMultiplier: 1.0 },
+    { id: '2', name: 'Lavandaria Express', address: 'Avenida da Liberdade, 456, Porto', lat: 41.1579, lng: -8.6291, priceMultiplier: 1.2 },
+    { id: '3', name: 'Lavandaria Rápida', address: 'Rua do Comércio, 789, Braga', lat: 41.5518, lng: -8.4229, priceMultiplier: 0.9 },
+    { id: '4', name: 'Lavandaria Moderna', address: 'Praça do Comércio, 321, Coimbra', lat: 40.2033, lng: -8.4103, priceMultiplier: 1.1 },
+    { id: '5', name: 'Lavandaria 24h', address: 'Avenida Central, 654, Aveiro', lat: 40.6405, lng: -8.6538, priceMultiplier: 1.15 }
   ];
 
   constructor(
     private sanitizer: DomSanitizer,
     private router: Router,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -89,24 +91,55 @@ export class HomePage implements OnInit {
     // Limpar conteúdo anterior
     mapDiv.innerHTML = '';
 
+    // Obter localização atual do usuário
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          this.initMapWithLocation(mapDiv, userLocation);
+        },
+        (error) => {
+          console.error('Erro ao obter localização:', error);
+          // Se não conseguir obter localização, usar localização padrão (centro de Portugal)
+          const defaultLocation = { lat: 39.5, lng: -8.0 };
+          this.initMapWithLocation(mapDiv, defaultLocation);
+        }
+      );
+    } else {
+      // Se geolocalização não estiver disponível, usar localização padrão
+      const defaultLocation = { lat: 39.5, lng: -8.0 };
+      this.initMapWithLocation(mapDiv, defaultLocation);
+    }
+  }
+
+  initMapWithLocation(mapDiv: HTMLElement, centerLocation: { lat: number; lng: number }) {
     // Verificar se o Google Maps está carregado e tem chave válida
     if (typeof google === 'undefined' || !google.maps) {
       // Usar iframe do Google Maps como fallback (não requer chave de API)
-      this.initMapWithIframe(mapDiv);
+      this.initMapWithIframe(mapDiv, centerLocation);
       return;
     }
 
     // Limpar mapa anterior se existir
     if (this.map) {
-      this.markers.forEach(m => m.setMap(null));
+      this.markers.forEach(m => {
+        m.setMap(null);
+        // Remover círculos de ondas se existirem
+        if ((m as any).waves) {
+          (m as any).waves.forEach((wave: any) => wave.setMap(null));
+        }
+      });
       this.markers = [];
       this.map = null;
     }
 
     try {
       this.map = new google.maps.Map(mapDiv, {
-        center: { lat: 39.5, lng: -8.0 },
-        zoom: 15,
+        center: centerLocation,
+        zoom: 10,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: false,
         zoomControl: true,
@@ -118,18 +151,80 @@ export class HomePage implements OnInit {
         backgroundColor: '#e5e5e5'
       });
 
-      // Adicionar marcadores
+      // Adicionar marcador na localização atual do usuário
+      const userMarker = new google.maps.Marker({
+        position: centerLocation,
+        map: this.map,
+        title: 'A sua localização',
+        icon: {
+          url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+          scaledSize: new google.maps.Size(40, 40)
+        },
+        animation: google.maps.Animation.DROP
+      });
+      this.markers.push(userMarker);
+
+      // Adicionar marcadores das lavandarias com animação de ondas
       this.laundries.forEach(laundry => {
+        // Criar círculo vermelho para o marcador
+        const markerIcon = {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: '#FF0000',
+          fillOpacity: 1,
+          strokeColor: '#FFFFFF',
+          strokeWeight: 2,
+        };
+
         const marker = new google.maps.Marker({
           position: { lat: laundry.lat, lng: laundry.lng },
           map: this.map,
           title: laundry.name,
-          icon: {
-            url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-            scaledSize: new google.maps.Size(40, 40)
-          },
+          icon: markerIcon,
           animation: google.maps.Animation.DROP
         });
+
+        // Criar círculos animados (ondas) ao redor do marcador
+        const createWave = (radius: number, delay: number) => {
+          const circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.6,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.1,
+            map: this.map,
+            center: { lat: laundry.lat, lng: laundry.lng },
+            radius: radius,
+          });
+
+          // Animação de expansão
+          let currentRadius = radius;
+          const expand = () => {
+            currentRadius += 15;
+            circle.setRadius(currentRadius);
+            circle.set('fillOpacity', Math.max(0, 0.1 - (currentRadius - radius) / 200));
+            circle.set('strokeOpacity', Math.max(0, 0.6 - (currentRadius - radius) / 200));
+            
+            if (currentRadius < radius + 150) {
+              setTimeout(expand, 50);
+            } else {
+              // Reset e repetir
+              currentRadius = radius;
+              circle.setRadius(radius);
+              circle.set('fillOpacity', 0.1);
+              circle.set('strokeOpacity', 0.6);
+              setTimeout(expand, delay);
+            }
+          };
+          
+          setTimeout(() => expand(), delay);
+          return circle;
+        };
+
+        // Criar múltiplas ondas com delays diferentes
+        const wave1 = createWave(30, 0);
+        const wave2 = createWave(30, 500);
+        const wave3 = createWave(30, 1000);
 
         marker.addListener('click', () => {
           this.tempSelectedLaundry = laundry;
@@ -138,6 +233,8 @@ export class HomePage implements OnInit {
         });
 
         this.markers.push(marker);
+        // Guardar os círculos para poder removê-los depois
+        (marker as any).waves = [wave1, wave2, wave3];
       });
 
       // Forçar resize do mapa após um pequeno delay
@@ -149,17 +246,17 @@ export class HomePage implements OnInit {
     } catch (error) {
       console.error('Erro ao inicializar mapa:', error);
       // Se houver erro, usar iframe como fallback
-      this.initMapWithIframe(mapDiv);
+      this.initMapWithIframe(mapDiv, centerLocation);
     }
   }
 
-  initMapWithIframe(mapDiv: HTMLElement) {
+  initMapWithIframe(mapDiv: HTMLElement, centerLocation: { lat: number; lng: number }) {
     // Usar iframe do Google Maps (funciona sem chave de API para visualização)
-    const centerLat = 39.5;
-    const centerLng = -8.0;
+    const centerLat = centerLocation.lat;
+    const centerLng = centerLocation.lng;
     
-    // Criar URL do Google Maps com centro em Portugal
-    const mapUrl = `https://www.google.com/maps?q=${centerLat},${centerLng}&z=7&output=embed`;
+    // Criar URL do Google Maps com centro na localização atual do usuário
+    const mapUrl = `https://www.google.com/maps?q=${centerLat},${centerLng}&z=10&output=embed`;
     
     const iframe = document.createElement('iframe');
     iframe.src = mapUrl;
@@ -179,16 +276,15 @@ export class HomePage implements OnInit {
     // Criar lista de lavandarias como overlay
     const overlayContainer = document.createElement('div');
     overlayContainer.style.position = 'absolute';
-    overlayContainer.style.bottom = '20px';
-    overlayContainer.style.left = '20px';
-    overlayContainer.style.right = '20px';
+    overlayContainer.style.bottom = '0px';
+    overlayContainer.style.left = '0px';
+    overlayContainer.style.right = '0px';
     overlayContainer.style.zIndex = '1000';
-    overlayContainer.style.maxHeight = '200px';
+    overlayContainer.style.maxHeight = '220px';
     overlayContainer.style.overflowY = 'auto';
     overlayContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-    overlayContainer.style.borderRadius = '12px';
     overlayContainer.style.padding = '12px';
-    overlayContainer.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    overlayContainer.style.boxShadow = 'rgba(0, 0, 0, 0.15) 0px 4px 12px';
     overlayContainer.id = 'laundry-list-overlay';
     
     this.laundries.forEach((laundry) => {
@@ -250,15 +346,24 @@ export class HomePage implements OnInit {
   }
 
   centerMapOnUser() {
-    if (navigator.geolocation && this.map) {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
-          this.map.setCenter(userLocation);
-          this.map.setZoom(15);
+          if (this.map) {
+            this.map.setCenter(userLocation);
+            this.map.setZoom(10);
+          } else {
+            // Se o mapa ainda não foi inicializado, reinicializar com a nova localização
+            const mapDiv = document.getElementById('map');
+            if (mapDiv) {
+              mapDiv.innerHTML = '';
+              this.initMapWithLocation(mapDiv, userLocation);
+            }
+          }
         },
         (error) => {
           console.error('Erro ao obter localização:', error);
@@ -302,6 +407,17 @@ export class HomePage implements OnInit {
     }
   }
 
+  removeSelectedLaundry() {
+    this.selectedLaundry = null;
+    localStorage.removeItem('selectedLaundry');
+    this.selectedLaundryMapUrl = null;
+  }
+
+  removeSelectedLaundryAndClose() {
+    this.removeSelectedLaundry();
+    this.closeMap();
+  }
+
   updateSelectedLaundryMap() {
     if (this.selectedLaundry) {
       const mapUrl = `https://maps.google.com/maps?q=${this.selectedLaundry.lat},${this.selectedLaundry.lng}&z=15&output=embed`;
@@ -324,6 +440,8 @@ export class HomePage implements OnInit {
     const { data } = await popover.onDidDismiss();
     if (data && data.logout) {
       this.logout();
+    } else if (data && data.updateProfile) {
+      this.router.navigate(['/perfil']);
     }
   }
 
@@ -333,7 +451,29 @@ export class HomePage implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  goToDrying() {
+  async goToWashing() {
+    if (!this.selectedLaundry) {
+      const toast = await this.toastController.create({
+        message: 'Por favor, selecione uma lavandaria primeiro.',
+        duration: 2000,
+        color: 'warning',
+      });
+      toast.present();
+      return;
+    }
+    this.router.navigate(['/lavagem/lavar']);
+  }
+
+  async goToDrying() {
+    if (!this.selectedLaundry) {
+      const toast = await this.toastController.create({
+        message: 'Por favor, selecione uma lavandaria primeiro.',
+        duration: 2000,
+        color: 'warning',
+      });
+      toast.present();
+      return;
+    }
     this.router.navigate(['/secagem/secar']);
   }
 

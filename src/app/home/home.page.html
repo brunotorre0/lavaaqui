@@ -8,11 +8,16 @@
   </div>
 
   <div class="home-body">
-    <button class="location-card" type="button" (click)="openMap()">
-      <ion-icon class="location-icon" name="location-outline" aria-hidden="true"></ion-icon>
-      <span class="location-label">{{ selectedLaundry ? selectedLaundry.name : 'Morada' }}</span>
-      <ion-icon class="location-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
-    </button>
+    <div class="location-card-wrapper">
+      <button class="location-card" type="button" (click)="openMap()">
+        <ion-icon class="location-icon" name="location-outline" aria-hidden="true"></ion-icon>
+        <span class="location-label">{{ selectedLaundry ? selectedLaundry.name : 'Morada' }}</span>
+        <ion-icon class="location-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </button>
+      <button *ngIf="selectedLaundry" class="remove-laundry-button" type="button" (click)="removeSelectedLaundry()" title="Remover seleção">
+        <ion-icon name="close-circle-outline" aria-hidden="true"></ion-icon>
+      </button>
+    </div>
 
     <div class="selected-map-container" *ngIf="selectedLaundry">
       <iframe
@@ -32,7 +37,7 @@
     </div>
 
     <div class="action-grid">
-      <button class="action-card" type="button">
+      <button class="action-card" type="button" (click)="goToWashing()">
         <ion-icon name="water-outline" aria-hidden="true"></ion-icon>
         <span>Lavar</span>
       </button>
@@ -76,6 +81,20 @@
               </ion-button>
               <ion-button expand="block" fill="outline" (click)="cancelSelection()" class="cancel-button">
                 Cancelar
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </div>
+        <div class="laundry-selection" *ngIf="selectedLaundry && !tempSelectedLaundry">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{ selectedLaundry.name }}</ion-card-title>
+              <ion-card-subtitle>{{ selectedLaundry.address }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-button expand="block" fill="outline" color="danger" (click)="removeSelectedLaundryAndClose()" class="remove-button">
+                <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                Remover Seleção
               </ion-button>
             </ion-card-content>
           </ion-card>

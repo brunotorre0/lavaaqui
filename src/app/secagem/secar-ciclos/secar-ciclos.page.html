@@ -5,7 +5,7 @@
         <button type="button" class="icon-button" (click)="goBack()">
           <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
         </button>
-        <ion-icon name="person-circle-outline" class="profile-icon" aria-hidden="true"></ion-icon>
+        <ion-icon name="person-circle-outline" class="profile-icon" aria-hidden="true" (click)="openAccountMenu($event)"></ion-icon>
       </div>
       <div class="machine-badge" *ngIf="machine">
         <span>{{ machine.id }}</span>

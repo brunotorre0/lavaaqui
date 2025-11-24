@@ -1,0 +1,127 @@
+<ion-content class="profile-content" [fullscreen]="true">
+  <div class="page-wrapper">
+    <div class="hero-card">
+      <div class="hero-top">
+        <button type="button" class="icon-button" (click)="goBack()">
+          <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+        </button>
+        <h1>Atualizar Perfil</h1>
+        <div style="width: 42px;"></div>
+      </div>
+    </div>
+
+    <div class="profile-container">
+      <div class="profile-section">
+        <h2 class="section-title">Foto de Perfil</h2>
+        <div class="image-section">
+          <div class="image-preview">
+            <img *ngIf="userImage" [src]="userImage" alt="Foto de perfil" class="profile-image">
+            <ion-icon *ngIf="!userImage" name="person-circle-outline" class="default-icon"></ion-icon>
+          </div>
+          <div class="image-actions">
+            <input
+              type="file"
+              accept="image/*"
+              id="imageInput"
+              style="display: none;"
+              (change)="onImageSelected($event)"
+            />
+            <label for="imageInput" class="image-button">
+              <ion-icon name="camera-outline"></ion-icon>
+              <span>Alterar Foto</span>
+            </label>
+            <button *ngIf="userImage" type="button" class="remove-image-button" (click)="removeImage()">
+              <ion-icon name="trash-outline"></ion-icon>
+              <span>Remover</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h2 class="section-title">Nome</h2>
+        <div class="input-group">
+          <ion-input
+            type="text"
+            [(ngModel)]="newName"
+            placeholder="Nome"
+            class="profile-input"
+          ></ion-input>
+          <ion-button expand="block" class="update-button" (click)="updateName()">
+            Atualizar Nome
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h2 class="section-title">E-mail</h2>
+        <div class="input-group">
+          <ion-input
+            type="email"
+            [(ngModel)]="newEmail"
+            placeholder="E-mail"
+            class="profile-input"
+          ></ion-input>
+          <ion-button expand="block" class="update-button" (click)="updateEmail()">
+            Atualizar E-mail
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h2 class="section-title">Palavra-passe</h2>
+        <div class="input-group">
+          <div class="password-input-wrapper">
+            <ion-input
+              [type]="showCurrentPassword ? 'text' : 'password'"
+              [(ngModel)]="currentPassword"
+              placeholder="Palavra-passe atual"
+              class="profile-input"
+            ></ion-input>
+            <button
+              type="button"
+              class="visibility-toggle"
+              (click)="showCurrentPassword = !showCurrentPassword"
+            >
+              <ion-icon [name]="showCurrentPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
+          </div>
+          <div class="password-input-wrapper">
+            <ion-input
+              [type]="showNewPassword ? 'text' : 'password'"
+              [(ngModel)]="newPassword"
+              placeholder="Nova palavra-passe"
+              class="profile-input"
+            ></ion-input>
+            <button
+              type="button"
+              class="visibility-toggle"
+              (click)="showNewPassword = !showNewPassword"
+            >
+              <ion-icon [name]="showNewPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
+          </div>
+          <div class="password-input-wrapper">
+            <ion-input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              [(ngModel)]="confirmPassword"
+              placeholder="Confirmar nova palavra-passe"
+              class="profile-input"
+            ></ion-input>
+            <button
+              type="button"
+              class="visibility-toggle"
+              (click)="showConfirmPassword = !showConfirmPassword"
+            >
+              <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
+          </div>
+          <ion-button expand="block" class="update-button" (click)="updatePassword()">
+            Atualizar Palavra-passe
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

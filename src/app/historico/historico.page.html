@@ -1,40 +1,96 @@
 <ion-content class="history-content" [fullscreen]="true">
   <div class="page-wrapper">
-    <h2 class="page-title-top">Histórico</h2>
     <div class="hero-card">
       <div class="hero-top">
         <button type="button" class="icon-button" (click)="goBack()">
-          <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
+          <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
         </button>
         <h1>LavaAqui</h1>
-        <ion-icon name="person-circle-outline" class="profile-icon" aria-hidden="true"></ion-icon>
+        <ion-icon name="person-circle-outline" class="profile-icon" aria-hidden="true" (click)="openAccountMenu($event)"></ion-icon>
       </div>
     </div>
 
     <div class="history-container">
+      <h2 class="section-title">Histórico</h2>
 
-      <div class="history-table" *ngIf="history.length > 0">
-        <div class="table-header">
-          <div class="header-cell">Tipo</div>
-          <div class="header-cell">Preço</div>
-          <div class="header-cell">Data</div>
-        </div>
+      <div class="history-list" *ngIf="history.length > 0">
+        <div class="history-card" *ngFor="let entry of history">
+          <div class="card-header">
+            <div class="header-left">
+              <span class="type-badge" [ngClass]="getTypeClass(entry.type)">
+                <ion-icon [name]="entry.type === 'lavagem' ? 'water-outline' : 'sunny-outline'"></ion-icon>
+                {{ entry.type === 'lavagem' ? 'Lavagem' : 'Secagem' }}
+              </span>
+              <span class="price-badge">
+                {{ formatPrice(entry.price) }}
+              </span>
+              <span class="payment-badge" *ngIf="entry.paymentMethod" [ngClass]="getPaymentClass(entry.paymentMethod)">
+                <ion-icon [name]="getPaymentIcon(entry.paymentMethod)"></ion-icon>
+                {{ entry.paymentMethod }}
+              </span>
+            </div>
+            <div class="header-right">
+              <span class="date-time">
+                <ion-icon name="calendar-outline"></ion-icon>
+                {{ entry.date }} às {{ entry.time }}
+              </span>
+            </div>
+          </div>
 
-        <div class="table-row" *ngFor="let entry of history">
-          <div class="table-cell">
-            <span class="type-badge" [ngClass]="getTypeClass(entry.type)">
-              {{ entry.label }}
-            </span>
-          </div>
-          <div class="table-cell">
-            <span class="price-badge">
-              {{ formatPrice(entry.price) }}
-            </span>
-          </div>
-          <div class="table-cell">
-            <span class="date-badge">
-              {{ entry.date }}
-            </span>
+          <div class="card-body">
+            <div class="info-row">
+              <div class="info-item">
+                <ion-icon name="cube-outline"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Máquina</span>
+                  <span class="info-value">{{ entry.label }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-grid">
+              <div class="info-item" *ngIf="entry.machineWeight">
+                <ion-icon name="scale-outline"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Capacidade</span>
+                  <span class="info-value">{{ entry.machineWeight }} kg</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="entry.duration">
+                <ion-icon name="time-outline"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Duração</span>
+                  <span class="info-value">{{ entry.duration }} min</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="entry.program">
+                <ion-icon name="settings-outline"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Programa</span>
+                  <span class="info-value">{{ getProgramLabel(entry.program) }}</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="entry.cycles">
+                <ion-icon name="repeat-outline"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Ciclos</span>
+                  <span class="info-value">{{ entry.cycles }} min</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-row" *ngIf="entry.paymentMethod">
+              <div class="info-item payment-info" [ngClass]="getPaymentClass(entry.paymentMethod)">
+                <ion-icon [name]="getPaymentIcon(entry.paymentMethod)"></ion-icon>
+                <div class="info-content">
+                  <span class="info-label">Método de Pagamento</span>
+                  <span class="info-value">{{ entry.paymentMethod }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonicModule, ToastController, PopoverController, ModalController } from '@ionic/angular';
-import { DryingService } from '../drying.service';
+import { LavagemService } from '../lavagem.service';
 import { HistoryService } from '../../historico/history.service';
 import { AccountMenuComponent } from '../../home/account-menu.component';
 import { PaymentModalComponent, PaymentData } from '../../shared/payment-modal.component';
@@ -15,14 +15,14 @@ interface PaymentOption {
 }
 
 @Component({
-  selector: 'app-secar-pagamento',
-  templateUrl: './secar-pagamento.page.html',
-  styleUrls: ['./secar-pagamento.page.scss'],
+  selector: 'app-lavar-pagamento',
+  templateUrl: './lavar-pagamento.page.html',
+  styleUrls: ['./lavar-pagamento.page.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule],
 })
-export class SecarPagamentoPage {
-  summary = this.dryingService.getSummary();
+export class LavarPagamentoPage {
+  summary = this.lavagemService.getSummary();
   selectedPayment: string | null = null;
   userEmail: string = '';
 
@@ -35,7 +35,7 @@ export class SecarPagamentoPage {
 
   constructor(
     private router: Router,
-    private dryingService: DryingService,
+    private lavagemService: LavagemService,
     private toastController: ToastController,
     private historyService: HistoryService,
     private popoverController: PopoverController,
@@ -48,14 +48,14 @@ export class SecarPagamentoPage {
   }
 
   ionViewWillEnter() {
-    this.summary = this.dryingService.getSummary();
+    this.summary = this.lavagemService.getSummary();
     if (!this.summary) {
-      this.router.navigate(['/secagem/secar']);
+      this.router.navigate(['/lavagem/lavar']);
     }
   }
 
   goBack() {
-    this.router.navigate(['/secagem/ciclos']);
+    this.router.navigate(['/lavagem/ciclos']);
   }
 
   async selectPayment(id: string) {
@@ -104,12 +104,12 @@ export class SecarPagamentoPage {
     if (this.summary) {
       const paymentMethodLabel = this.paymentOptions.find(p => p.id === this.selectedPayment)?.label || 'Desconhecido';
       this.historyService.addEntry({
-        type: 'secagem',
+        type: 'lavagem',
         label: this.summary.machine.label,
         price: this.summary.total,
         machineWeight: this.summary.machine.weightKg,
         duration: this.summary.machine.durationMinutes,
-        cycles: this.summary.cycles,
+        program: this.summary.programId,
         paymentMethod: paymentMethodLabel,
       });
     }
@@ -120,7 +120,7 @@ export class SecarPagamentoPage {
       color: 'success',
     });
     toast.present();
-    this.dryingService.reset();
+    this.lavagemService.reset();
     this.router.navigate(['/home']);
   }
 

@@ -1,0 +1,128 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ getPaymentMethodLabel() }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="payment-modal-content">
+  <div class="modal-wrapper">
+    <div class="amount-display">
+      <span class="amount-label">Valor a pagar</span>
+      <span class="amount-value">{{ formatPrice(amount) }}</span>
+    </div>
+
+    <!-- Cartão de Crédito -->
+    <div *ngIf="paymentMethod === 'card'" class="payment-form">
+      <ion-item>
+        <ion-label position="stacked">Número do Cartão</ion-label>
+        <ion-input
+          type="text"
+          placeholder="1234 5678 9012 3456"
+          [(ngModel)]="cardNumber"
+          (ionInput)="formatCardNumber($event)"
+          maxlength="19"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Nome no Cartão</ion-label>
+        <ion-input
+          type="text"
+          placeholder="Nome completo"
+          [(ngModel)]="cardName"
+        ></ion-input>
+      </ion-item>
+
+      <div class="row-inputs">
+        <ion-item class="half-width">
+          <ion-label position="stacked">Validade</ion-label>
+          <ion-input
+            type="text"
+            placeholder="MM/AA"
+            [(ngModel)]="expiryDate"
+            (ionInput)="formatExpiryDate($event)"
+            maxlength="5"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item class="half-width">
+          <ion-label position="stacked">CVV</ion-label>
+          <ion-input
+            type="text"
+            placeholder="123"
+            [(ngModel)]="cvv"
+            (ionInput)="formatCVV($event)"
+            maxlength="3"
+          ></ion-input>
+        </ion-item>
+      </div>
+    </div>
+
+    <!-- MB WAY -->
+    <div *ngIf="paymentMethod === 'mb-way'" class="payment-form">
+      <ion-item>
+        <ion-label position="stacked">Número de Telefone</ion-label>
+        <ion-input
+          type="tel"
+          placeholder="912 345 678"
+          [(ngModel)]="phoneNumber"
+          (ionInput)="formatPhoneNumber($event)"
+          maxlength="9"
+        ></ion-input>
+      </ion-item>
+      <p class="info-text">Receberá uma notificação no seu MB WAY para confirmar o pagamento.</p>
+    </div>
+
+    <!-- PayPal -->
+    <div *ngIf="paymentMethod === 'paypal'" class="payment-form">
+      <ion-item>
+        <ion-label position="stacked">Email do PayPal</ion-label>
+        <ion-input
+          type="email"
+          placeholder="seu@email.com"
+          [(ngModel)]="email"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Senha</ion-label>
+        <ion-input
+          type="password"
+          placeholder="••••••"
+          [(ngModel)]="password"
+        ></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- MB MULTIBANCO -->
+    <div *ngIf="paymentMethod === 'multibanco'" class="payment-form">
+      <div class="multibanco-reference">
+        <ion-icon name="cash-outline" class="reference-icon"></ion-icon>
+        <div class="reference-info">
+          <p class="reference-label">Referência Multibanco</p>
+          <p class="reference-value">{{ reference }}</p>
+          <p class="reference-amount">Valor: {{ formatPrice(amount) }}</p>
+        </div>
+      </div>
+      <p class="info-text">
+        Utilize esta referência para pagar em qualquer terminal Multibanco ou no seu homebanking.
+        O pagamento será processado automaticamente após a confirmação.
+      </p>
+    </div>
+
+    <ion-button
+      expand="block"
+      class="confirm-button"
+      [disabled]="!isFormValid()"
+      (click)="confirmPayment()"
+    >
+      Confirmar Pagamento
+    </ion-button>
+  </div>
+</ion-content>
+

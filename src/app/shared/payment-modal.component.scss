@@ -1,0 +1,145 @@
+.payment-modal-content {
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 20px;
+  --padding-bottom: 20px;
+}
+
+.modal-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.amount-display {
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  color: white;
+  
+  .amount-label {
+    display: block;
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+  }
+  
+  .amount-value {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+  }
+}
+
+.payment-form {
+  margin-bottom: 24px;
+  
+  ion-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    margin-bottom: 16px;
+    --border-radius: 12px;
+    --background: #f5f5f5;
+    
+    ion-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    ion-input {
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+    }
+  }
+  
+  .row-inputs {
+    display: flex;
+    gap: 12px;
+    
+    .half-width {
+      flex: 1;
+    }
+  }
+  
+  .info-text {
+    font-size: 14px;
+    color: #666;
+    margin-top: 16px;
+    line-height: 1.5;
+    padding: 0 4px;
+  }
+}
+
+.multibanco-reference {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(135deg, #bafdff 0%, #a0f0f2 100%);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  
+  .reference-icon {
+    font-size: 48px;
+    color: #6B46C1;
+  }
+  
+  .reference-info {
+    flex: 1;
+    
+    .reference-label {
+      font-size: 14px;
+      color: #666;
+      margin: 0 0 8px 0;
+      font-weight: 500;
+    }
+    
+    .reference-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #333;
+      margin: 0 0 8px 0;
+      letter-spacing: 2px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .reference-amount {
+      font-size: 18px;
+      font-weight: 600;
+      color: #6B46C1;
+      margin: 0;
+    }
+  }
+}
+
+.confirm-button {
+  height: 52px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 18px;
+  --color: #fff;
+  --border-radius: 999px;
+  --box-shadow: 0 12px 24px rgba(107, 70, 193, 0.3);
+  --background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%);
+  margin-top: 24px;
+  
+  &[disabled] {
+    opacity: 0.5;
+  }
+}
+
+ion-header {
+  ion-toolbar {
+    --background: #fff;
+    --color: #333;
+    
+    ion-title {
+      font-weight: 600;
+    }
+  }
+}
+

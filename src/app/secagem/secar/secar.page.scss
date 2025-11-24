@@ -7,16 +7,18 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative;
 }
 
 .hero-card {
   background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #50C9CE 100%);
-  border-radius: 0 0 70% 70% / 0 0 140px 140px;
-  padding: 56px 24px 80px;
+  border-radius: 0 0 70% 70% / 0 0 100px 100px;
+  padding: 40px 24px 40px;
   position: relative;
   color: white;
   overflow: visible;
   z-index: 1;
+  margin-bottom: 0;
 }
 
 .hero-top {
@@ -24,6 +26,10 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  ion-content {
+    --padding-bottom: 120px;
+    --background: #f5f5f5;
+  }
 }
 
 .icon-button {
@@ -41,6 +47,12 @@
 .profile-icon {
   font-size: 2rem;
   color: white;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  
+  &:active {
+    opacity: 0.7;
+  }
 }
 
 .hero-card h1 {
@@ -56,11 +68,12 @@
 .machine-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: -60px;
-  padding: 0 20px 24px;
+  gap: 12px;
+  margin-top: 0;
+  padding: 40px 20px 160px;
   position: relative;
   z-index: 2;
+  flex: 1;
 }
 
 .machine-card {
@@ -68,12 +81,18 @@
   grid-template-columns: 48px 1fr auto;
   align-items: center;
   gap: 12px;
-  padding: 16px;
-  border-radius: 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
   border: none;
   background: #fff;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
   text-align: left;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.machine-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .machine-index {
@@ -120,18 +139,23 @@
   text-align: center;
   background: rgba(107, 70, 193, 0.1);
   border-radius: 18px;
-  padding: 16px;
+  padding: 12px 16px;
   color: #6B46C1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   margin: 0 20px 24px;
-  position: relative;
-  z-index: 2;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .step-info strong {
   font-size: 16px;
+  font-weight: 600;
 }
 
 .step-info span {
